@@ -4,13 +4,14 @@ from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.exceptions import (
-    InvalidSignatureError
+    InvalidSignatureError, LineBotApiError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
 )
 
 app = Flask(__name__)
+
 line_bot_api = LineBotApi('n/LnYr4PB08RFunptSQU1CiTD98N4gaJQ4AmixCeQJKLmYJuUq56DGoMFQHsghmFcCgV2caiE/B4NeUQVGCyKOXFQ4DJTm0w5CoXQlBVyyht7ZL+EIiNkMUBi3xHgLCUqwB87jBAbXtV90GpBGGt1QdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('97e16b060f49eee4a9d016cee1478a81')
 
@@ -42,11 +43,30 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+      # get user id when reply
+    user_id = event.source.user_id
+    print("user_id =", user_id)
+    
+    reply_msg = event.message.text+'\nyour User ID is '+user_id+\
+                    ' \n輸入「你好」會啟動reply_message回復「不錯喔」'
+    
+    if event.message.text=='你好':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='不錯喔'))
+    
+    image_url = 'https://i.imgur.com/d3vfgZP.png'
+    try:
+        line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+    except LineBotApiError as e:
+        # error handle
+        raise e
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply_msg))
 
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host=0.0.0.0', port=port)
