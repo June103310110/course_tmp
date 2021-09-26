@@ -15,11 +15,11 @@ from linebot.models import TemplateSendMessage, ButtonsTemplate, PostbackTemplat
 app = Flask(__name__)
 
 
-line_bot_api = LineBotApi('Channel access token')
-handler = WebhookHandler('Channel secret')
+line_bot_api = LineBotApi('n/LnYr4PB08RFunptSQU1CiTD98N4gaJQ4AmixCeQJKLmYJuUq56DGoMFQHsghmFcCgV2caiE/B4NeUQVGCyKOXFQ4DJTm0w5CoXQlBVyyht7ZL+EIiNkMUBi3xHgLCUqwB87jBAbXtV90GpBGGt1QdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('97e16b060f49eee4a9d016cee1478a81')
 
 # 推給你自己 
-line_bot_api.push_message('Your user ID ', TextSendMessage(text='(後臺訊息)啟動豆芽探索共學ECHO機器人!'))
+line_bot_api.push_message('Uf7ed79507d4604d7ad583f14863e2595', TextSendMessage(text='(後臺訊息)啟動豆芽探索共學ECHO機器人!'))
 
 
 # 推給某個User
